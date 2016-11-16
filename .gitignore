@@ -178,3 +178,18 @@ TSWLatexianTemp*
 
 # KBibTeX
 *~[0-9]*
+
+# imagefiles
+*.png
+*.PNG
+*.eps
+
+# VS
+*.user
+*.tlog
+*.pdb
+*.db
+*.idb
+*.pdf
+*.filters
+*.obj

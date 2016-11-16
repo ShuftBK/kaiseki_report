@@ -1,0 +1,160 @@
+\documentclass[uplatex]{jsarticle}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{listings,jlisting}
+\lstset{%
+  language={C},
+  basicstyle={\small},%
+  identifierstyle={\small},%
+  commentstyle={\small\itshape},%
+  keywordstyle={\small\bfseries},%
+  ndkeywordstyle={\small},%
+  stringstyle={\small\ttfamily},
+  frame={tb},
+  breaklines=true,
+  keepspaces=true,
+  showstringspaces=false,
+  columns=[l]{fullflexible},%
+  numbers=left,%
+  xrightmargin=0zw,%
+  xleftmargin=3zw,%
+  numberstyle={\scriptsize},%
+  stepnumber=1,
+  numbersep=1zw,%
+  lineskip=-0.5ex%
+}
+
+\title{非線形方程式における解法プログラム}
+\author{\vspace{-30mm}}
+\date{\vspace{-10mm}}
+\begin{document}
+\maketitle
+\begin{flushright}
+(　´\_ゝ｀)ﾌｰﾝ
+\end{flushright}
+\section{課題2の結果}
+課題2における非線形方程式式(\ref{eq:fanc})に、$a=2$$b=5$を代入し、課題2において使用した式(\ref{eq:f})を示す。
+\begin{eqnarray}
+f(x)=b+\mathrm{e}^{(-(b+1))}-(a+1) \label{eq:fanc}\\
+f(x)=5+\mathrm{e}^{-6x}-3x \label{eq:f}
+\end{eqnarray}
+式(\ref{eq:f})より、$f(x)=0$に近似するグラフを図\ref{fig:Approximate}に示す。
+\begin{figure}[ht]
+  \centering
+   \includegraphics[clip,scale=0.5]{figures/Approximate_solution_autoscale.png}
+   \caption{課題2における非線形方程式}
+   \label{fig:Approximate}
+\end{figure}
+
+図\ref{fig:Approximate}より、近似解は1.6から1.7の間であることが読み取れる。この結果を用い、2分法で用いる初期区間を$[1.6,1.7]$と定めた。なお$\delta$法および、$\epsilon$法における収束条件はそれぞれ${10}^{-15}$とし、各解法において共通とした。実行結果における$processing\ time$については後節の考察にて説明する。
+
+\newpage
+
+\subsection{2分法}
+実行結果を図\ref{fig:bisection}に示す。
+\begin{figure}[ht]
+  \centering
+   \includegraphics[clip,scale=0.8]{figures/bisection_hoge.png}
+   \caption{2分法における課題2実行結果}
+   \label{fig:bisection}
+\end{figure}
+
+\subsection{ニュートン法}
+実行結果を図\ref{fig:newton}に示す。
+\begin{figure}[ht]
+  \centering
+   \includegraphics[clip,scale=0.8]{figures/newton_timer.png}
+   \caption{ニュートン法における課題2実行結果}
+   \label{fig:newton}
+\end{figure}
+
+\subsection{割線法}
+実行結果を図\ref{fig:secant}に示す。
+\begin{figure}[ht]
+  \centering
+   \includegraphics[clip,scale=0.8]{figures/secant_timer.png}
+   \caption{割線法における課題2実行結果}
+   \label{fig:secant}
+\end{figure}
+
+\section{考察}
+近似解への収束する様子を処理に対する実行時間と実行回数によって比較した。
+
+まず、実行時間から比較する。前節図\ref{fig:bisection},\ref{fig:newton},\ref{fig:secant}において示される$processing\ time$が実行時間である。これらの結果より、早く近似解を求める方法としてニュートン法が最も最速であり有効であるということが言える。しかし、２分法において初期区間が有効な範囲でないといけないという制約のもと区間決定をしたため、区間を変更した場合計算回数が増減する。そこで初期区間である変数a変数bを広くとった場合と狭くとった場合で再び実行した。以下図\ref{fig:bisection_re1},\ref{fig:bisection_re2}に実行結果を示す。なお初期区間は一行目aとbに示す。
+
+\begin{figure}[ht]
+  \centering
+   \includegraphics[clip,scale=0.8]{figures/bisection_re1.png}
+   \caption{2分法において初期区間を広くとった場合の実行時間}
+   \label{fig:bisection_re1}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+   \includegraphics[clip,scale=0.8]{figures/bisection_re3.png}
+   \caption{2分法において初期区間を狭くとった場合の実行時間}
+   \label{fig:bisection_re2}
+\end{figure}
+
+図\ref{fig:bisection_re1}から大きく区間を取った場合では実行時間がわずかに増えるため、区間が増大することで実行時間が延びることがわかる。図\ref{fig:bisection_re2}からは初期区間が狭くなることで実行時間が変わったことがわかる。2分法では区間によって実行時間が変化するということから、安定して実行速度の早いニュートン法を使うことで効率的に解を求めることができると考えられる。
+
+次に実行回数で比較する。プログラムについては実行回数のカウントが実行速度に影響することを懸念し別にプログラムを作成している。実行時間における結果を考慮し、2分法については同上の条件にて実行した。以下図\ref{fig:bisection_count} ～ \ref{fig:bisection_count_re2}に実行結果を示す。
+
+\begin{figure}[ht]
+  \centering
+   \includegraphics[clip,scale=0.8]{figures/bisection_count.png}
+   \caption{2分法における処理実行回数}
+   \label{fig:bisection_count}
+\end{figure}
+
+\newpage
+
+\begin{figure}[ht]
+  \centering
+   \includegraphics[clip,scale=0.8]{figures/newton_count.png}
+   \caption{ニュートン法における処理実行回数}
+   \label{fig:newton_count}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+   \includegraphics[clip,scale=0.8]{figures/secant_count.png}
+   \caption{割線法における処理実行回数}
+   \label{fig:secant_count}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+   \includegraphics[clip,scale=0.8]{figures/bisection_count_re1.png}
+   \caption{2分法において初期区間を広くとった場合}
+   \label{fig:bisection_count_re1}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[ht]
+  \centering
+   \includegraphics[clip,scale=0.8]{figures/bisection_count_re2.png}
+   \caption{2分法において初期区間を狭くとった場合}
+   \label{fig:bisection_count_re2}
+\end{figure}
+
+これらの結果から、実行回数の最も少ないニュートン法が最も計算回数が少なく近似解にたどりつけることがわかる。また2分法において実行回数の変化が区間が大きいほど大きくなり、狭まれば小さくなるということが読み取れる。
+
+これらの事柄より、処理における実行回数と実行時間の優れているニュートン法が最も効率のよい方法なのではないかと考えられる。しかし2分法では区間が限りなく近似解に近くなる区間を選択することで実行回数、実行時間ともにニュートン法よりも最短で導くことができると推測される。これを踏まえると、初期区間が近似解に限りなく近い区間であるわかっている場合を除けば、ニュートン法が最良であると考えられる。
+\clearpage
+\section{使用したプログラム}
+各参照したプログラムにおいて$\epsilon$法における変数$eps$の定義位置が異なっていたため、$\delta$法の変数$delta$を含め$eps$及び$delta$をヘッダファイルインクルード後にグローバル変数として定義しなおした。
+
+以下に使用したプログラムを示す。
+
+\lstinputlisting[caption=課題2における2分法プログラム,label=bisectioncode]{code/kaiseki/shin_kaiseki/Timerbisection.cpp}
+\clearpage
+
+\lstinputlisting[caption=課題2におけるニュートン法プログラム,label=newtoncode]{code/kaiseki/shin_kaiseki/Timernewton.cpp}
+\clearpage
+
+\lstinputlisting[caption=課題2における割線法プログラム,label=secantcode]{code/kaiseki/shin_kaiseki/Timersecant.cpp}
+\clearpage
+
+
+\end{document}
